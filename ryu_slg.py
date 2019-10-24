@@ -658,13 +658,26 @@ class StatsController(ControllerBase):
         else:
             return Response(status=404)
 
-        dpid=1
-        dp = self.dpset.get(int(dpid))
-        if dp is None:
-            return Response(status=404)
+        print slice
 
-        _ofp_version = dp.ofproto.OFP_VERSION
-        _ofctl = supported_ofctl.get(_ofp_version, None)
+        print "slice_id: " + str(slice_id)
+        src_ip = slice.get('src_ip')
+        print "src_ip: " + str(src_ip)
+        dst_ip = slice.get('dst_ip')
+        print "dst_ip: " + str(dst_ip)
+        dst_port = slice.get('dst_port')
+        print "dst_port: " + str(dst_port)
+        vni = 5000 + slice_id * 10
+        print "vni: " + str(vni)
+        
+        
+        # dpid=1
+        # dp = self.dpset.get(int(dpid))
+        # if dp is None:
+        #     return Response(status=404)
+
+        # _ofp_version = dp.ofproto.OFP_VERSION
+        # _ofctl = supported_ofctl.get(_ofp_version, None)
 
         return Response(status=200)
     
