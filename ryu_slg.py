@@ -644,11 +644,6 @@ class StatsController(ControllerBase):
             LOG.debug('invalid syntax %s', req.body)
             return Response(status=400)
 
-        slice_id = slice.get('slice_id')
-
-        if slice_id is None:
-            return Response(status=400)
-
         if cmd == 'add':
             print 'add slice'
         elif cmd == 'delete':
@@ -660,6 +655,7 @@ class StatsController(ControllerBase):
 
         print slice
 
+        slice_id = slice.get('slice_id')
         print "slice_id: " + str(slice_id)
         src_ip = slice.get('src_ip')
         print "src_ip: " + str(src_ip)
@@ -667,9 +663,9 @@ class StatsController(ControllerBase):
         print "dst_ip: " + str(dst_ip)
         dst_port = slice.get('dst_port')
         print "dst_port: " + str(dst_port)
-        vni = 5000 + slice_id * 10
-        print "vni: " + str(vni)
-        
+        if slice_id is not None:
+            vni = 5000 + slice_id * 10
+            print "vni: " + str(vni)
         
         # dpid=1
         # dp = self.dpset.get(int(dpid))
