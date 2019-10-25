@@ -19,6 +19,8 @@ import json
 import ast
 from webob import Response
 
+import pprint
+
 from ryu.base import app_manager
 from ryu.controller import ofp_event
 from ryu.controller import dpset
@@ -644,6 +646,8 @@ class StatsController(ControllerBase):
             LOG.debug('invalid syntax %s', req.body)
             return Response(status=400)
 
+        pp = pprint.PrettyPrinter(indent=4)
+        
         if cmd == 'add':
             print 'add slice'
         elif cmd == 'delete':
@@ -666,7 +670,16 @@ class StatsController(ControllerBase):
         if slice_id is not None:
             vni = 5000 + slice_id * 10
             print "vni: " + str(vni)
-        
+
+        flows = list()
+        for i in range(3):
+            flows.append({
+                "dpid":i,
+                "match":{"eth_type":0x800, "src_ip":src_ip, "dst_ip":dst_ip, "ip_proto": 6, "dst_port":dst_port},
+                "actions":[{"vni":slice_id}]
+            })
+        pp.pprint(flows)
+            
         # dpid=1
         # dp = self.dpset.get(int(dpid))
         # if dp is None:
