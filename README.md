@@ -14,7 +14,7 @@ git clone https://github.com/hibitomo/ryu_slg
 ## How to use
 
 ```
-ryu-manager ~/ryu_slg/ryu_slg.py
+ryu-manager ~/ryu_slg/ryu_slg.py ~/ryu_slg/ryu_slg_init.py
 ```
 
 ## API
