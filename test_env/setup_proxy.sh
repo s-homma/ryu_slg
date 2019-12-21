@@ -1,9 +1,9 @@
 #!/bin/bash
 
 HTTP_PROXY="http://example.com/"
-HTTPS_PROXY="https://example.com/"
+HTTPS_PROXY="http://example.com/"
 
-ANSIBLE_PLAYBOOK=./ansible-Proxy/setup.yml
+ANSIBLE_PLAYBOOK=./ansible-Proxy/site.yml
 TMP_INVENTORY="/tmp/setup_hosts"
 
 

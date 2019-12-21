@@ -1,6 +1,6 @@
 [submodule "ofct_script"]
 	path = ofct_script
 	url = https://github.com/hibitomo/ofctl_script
-[submodule "test_env/ansible-proxy"]
-	path = test_env/ansible-proxy
+[submodule "test_env/ansible-Proxy"]
+	path = test_env/ansible-Proxy
 	url = https://github.com/hibitomo/ansible-Proxy
