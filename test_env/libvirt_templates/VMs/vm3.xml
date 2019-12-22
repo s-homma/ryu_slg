@@ -1,0 +1,41 @@
+<domain type='kvm'>
+  <os>
+    <type>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <pae/>
+  </features>
+  <cpu mode='host-model'>
+    <model fallback='allow'/>
+    <topology sockets='1' cores='4' threads='1'/>
+  </cpu>
+  <devices>
+    <interface type='network'>
+      <source network='default'/>
+      <mac address='52:54:00:ff:00:03'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+      <model type='e1000'/>
+    </interface>
+    <interface type='vhostuser'>
+      <source type='unix' path='/tmp/sock11' mode='client'/>
+      <mac address='52:54:00:03:00:01'/>
+      <model type='virtio'/>
+      <driver>
+	<host csum='off' gso='off' tso4='off' tso6='off' ecn='off' mrg_rxbuf='off'/>
+	<guest csum='off' tso4='off' tso6='off' ecn='off' ufo='off'/>
+      </driver>
+      <!-- <address type='pci' domain='0x0000' bus='0x00' slot='0x08' function='0x0'/> -->
+    </interface>
+    <serial type='pty'>
+      <source path='/dev/pts/3'/>
+      <target port='0'/>
+    </serial>
+    <graphics type='vnc' autoport='yes' listen='127.0.0.1'>
+      <listen type='address' address='127.0.0.1'/>
+    </graphics>
+    <video/>
+  </devices>
+</domain>
