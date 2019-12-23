@@ -10,7 +10,10 @@
   </features>
   <cpu mode='host-model'>
     <model fallback='allow'/>
-    <topology sockets='1' cores='4' threads='1'/>
+    <topology sockets='1' cores='2' threads='1'/>
+    <numa>
+      <cell id='0' cpus='0-1' memory='2097152' unit='KiB' memAccess='shared'/>
+    </numa>
   </cpu>
   <devices>
     <interface type='network'>

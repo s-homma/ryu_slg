@@ -70,6 +70,6 @@ bridge of-bridge03 enable
 
 EOF
 
-# sudo rm /tmp/sock*
+sudo rm /tmp/sock*
 # sudo ${LAGO_CMD} -d -C ${CONF_FILE} -l ${LOG_FILE} -- -l ${COREMASK} --socket-mem ${MEMORY}  -n 4 --
 sudo ${LAGO_CMD} -d -C ${CONF_FILE} -l ${LOG_FILE} -- -l ${COREMASK} -n 4 --
