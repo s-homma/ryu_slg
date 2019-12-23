@@ -82,11 +82,32 @@ Create VMs
 
 ```
 cd ryu_slg/test_env
-sudo uvt-kvm create vm1 release=bionic --template ./libvirt_templates/VMs/vm1.xml --cpu 4 --memory 4096
-sudo uvt-kvm create vm2 release=bionic --template ./libvirt_templates/VMs/vm2.xml --cpu 4 --memory 4096
-sudo uvt-kvm create vm3 release=bionic --template ./libvirt_templates/VMs/vm3.xml --cpu 4 --memory 4096
-sudo uvt-kvm create vm4 release=bionic --template ./libvirt_templates/VMs/vm3.xml --cpu 4 --memory 4096
+sudo uvt-kvm create vm1 release=bionic --template ./libvirt_templates/VMs/vm1.xml --cpu 2 --memory 2048
+sudo uvt-kvm create vm2 release=bionic --template ./libvirt_templates/VMs/vm2.xml --cpu 2 --memory 2048
+sudo uvt-kvm create vm3 release=bionic --template ./libvirt_templates/VMs/vm3.xml --cpu 2 --memory 2048
+sudo uvt-kvm create vm4 release=bionic --template ./libvirt_templates/VMs/vm3.xml --cpu 2 --memory 2048
 ```
+
+edit xml
+
+```
+virsh edit vm1
+virsh edit vm2
+virsh edit vm3
+virsh edit vm4
+```
+
+```
+  <cpu mode='host-model'>
+    <model fallback='allow'/>
+    <topology sockets='1' cores='2' threads='1'/>
++    <numa>
++      <cell id='0' cpus='0-1' memory='2097152' unit='KiB' memAccess='shared'/>
++    </numa>
+  </cpu>
+
+```
+
 
 ### (Option) Setup proxy
 
