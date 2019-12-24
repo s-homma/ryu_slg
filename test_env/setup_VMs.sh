@@ -48,6 +48,7 @@ uvt-kvm ssh ${RT_NAME} "sudo ip neigh add ${SLG3_UL_ADDRESS} dev ens6 lladdr ${S
 uvt-kvm ssh ${RT_NAME} "sudo ip link set up  dev ens6"
 uvt-kvm ssh ${RT_NAME} "sudo ip addr"
 uvt-kvm ssh ${RT_NAME} "sudo ip route"
+uvt-kvm ssh ${RT_NAME} "sudo tc qdisc add dev ens6 root netem delay 100ms"
 uvt-kvm ssh ${RT_NAME} "echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward"
 echo ""
 
