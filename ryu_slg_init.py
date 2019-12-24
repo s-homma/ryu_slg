@@ -103,6 +103,29 @@ class SliceGateway(dict):
     def add_gw(self, index, ip_address, mac_address):
         self.interface[index].gateway = interface(0, ip_address, mac_address)
 
+def make_vxlan_encap_action(eth_src, eth_dst, ipv4_src, ipv4_dst, udp_src, vni):
+    return [
+        {"type": "ENCAP", "packet_type": PACKET_TYPE_VxLAN},
+        {"type": "SET_FIELD", "field": "vxlan_vni", "value": vni},
+        {"type": "ENCAP", "packet_type": PACKET_TYPE_UDP},
+        {"type": "SET_FIELD", "field": "udp_src", "value": udp_src},
+        {"type": "SET_FIELD", "field": "udp_dst", "value":4789},
+        {"type": "ENCAP", "packet_type": PACKET_TYPE_IPv4},
+        {"type": "SET_FIELD", "field": "ipv4_src", "value": ipv4_src},
+        {"type": "SET_FIELD", "field": "ipv4_dst", "value": ipv4_dst},
+        {"type": "SET_NW_TTL", "nw_ttl": 64},
+        {"type": "ENCAP",  "packet_type": PACKET_TYPE_ETHER},
+        {"type": "SET_FIELD", "field": "eth_src", "value": eth_src},
+        {"type": "SET_FIELD", "field": "eth_dst", "value": eth_dst}
+    ]
+def make_vxlan_decap_action():
+    return [
+        {"type": "DECAP", "cur_pkt_type": PACKET_TYPE_ETHER, "new_pkt_type": PACKET_TYPE_IPv4},
+        {"type": "DECAP", "cur_pkt_type": PACKET_TYPE_IPv4, "new_pkt_type": PACKET_TYPE_UDP},
+        {"type": "DECAP", "cur_pkt_type": PACKET_TYPE_UDP, "new_pkt_type": PACKET_TYPE_VxLAN},
+        {"type": "DECAP", "cur_pkt_type": PACKET_TYPE_VxLAN, "new_pkt_type": PACKET_TYPE_NEXT},
+    ]
+        
     
 slg = [
     SliceGateway(),
@@ -137,29 +160,6 @@ class RyuSlgInit(app_manager.RyuApp):
     def __init__(self, *args, ** kwargs):
         super(RyuSlgInit, self).__init__(*args, **kwargs)
 
-    def make_vxlan_encap_action(self, eth_src, eth_dst, ipv4_src, ipv4_dst, udp_src, vni):
-        return [
-                {"type": "ENCAP", "packet_type": PACKET_TYPE_VxLAN},
-                {"type": "SET_FIELD", "field": "vxlan_vni", "value": vni},
-                {"type": "ENCAP", "packet_type": PACKET_TYPE_UDP},
-                {"type": "SET_FIELD", "field": "udp_src", "value": udp_src},
-                {"type": "SET_FIELD", "field": "udp_dst", "value":4789},
-                {"type": "ENCAP", "packet_type": PACKET_TYPE_IPv4},
-                {"type": "SET_FIELD", "field": "ipv4_src", "value": ipv4_src},
-                {"type": "SET_FIELD", "field": "ipv4_dst", "value": ipv4_dst},
-                {"type": "SET_NW_TTL", "nw_ttl": 64},
-                {"type": "ENCAP",  "packet_type": PACKET_TYPE_ETHER},
-                {"type": "SET_FIELD", "field": "eth_src", "value": eth_src},
-                {"type": "SET_FIELD", "field": "eth_dst", "value": eth_dst}
-        ]
-    def make_vxlan_decap_action(self):
-        return [
-            {"type": "DECAP", "cur_pkt_type": PACKET_TYPE_ETHER, "new_pkt_type": PACKET_TYPE_IPv4},
-            {"type": "DECAP", "cur_pkt_type": PACKET_TYPE_IPv4, "new_pkt_type": PACKET_TYPE_UDP},
-            {"type": "DECAP", "cur_pkt_type": PACKET_TYPE_UDP, "new_pkt_type": PACKET_TYPE_VxLAN},
-            {"type": "DECAP", "cur_pkt_type": PACKET_TYPE_VxLAN, "new_pkt_type": PACKET_TYPE_NEXT},
-        ]
-        
     @set_ev_cls(ofp_event.EventOFPSwitchFeatures, CONFIG_DISPATCHER)
     def switch_features_handler(self, ev):
         datapath = ev.msg.datapath
@@ -183,7 +183,7 @@ class RyuSlgInit(app_manager.RyuApp):
             # in_port: 1 ENCAP
             flow = {'priority': 10, 'table_id':0}
             flow['match'] = {'in_port': 1, "dl_type":2048}
-            flow['actions'] = self.make_vxlan_encap_action(
+            flow['actions'] = make_vxlan_encap_action(
                 eth_src = slg[slg_id].interface[2].mac_address,
                 eth_dst = slg[slg_id].interface[2].gateway.mac_address,
                 ipv4_src = slg[slg_id].interface[2].ip_address,
@@ -195,12 +195,12 @@ class RyuSlgInit(app_manager.RyuApp):
             print flow
             mod_flow_entry(datapath, flow, ofproto.OFPFC_ADD)
         
-            # in_port: 2 DECAP
-            flow = {'priority': 10, 'table_id':0}
-            flow['match'] = {'in_port':2, 'dl_type': 2048, "nw_proto":17, "tp_dst": 4789}
-            flow['actions'] = self.make_vxlan_decap_action()
-            flow['actions'].append({"type": "SET_FIELD", "field": "eth_dst", "value": slg[0 if slg_id != 2 else 2].interface[1].gateway.mac_address})
-            flow['actions'].append({"type":"OUTPUT", "port": 1})
-            print flow
-            mod_flow_entry(datapath, flow, ofproto.OFPFC_ADD)
+        # in_port: 2 DECAP
+        flow = {'priority': 10, 'table_id':0}
+        flow['match'] = {'in_port':2, 'dl_type': 2048, "nw_proto":17, "tp_dst": 4789}
+        flow['actions'] = make_vxlan_decap_action()
+        flow['actions'].append({"type": "SET_FIELD", "field": "eth_dst", "value": slg[slg_id].interface[1].gateway.mac_address})
+        flow['actions'].append({"type":"OUTPUT", "port": 1})
+        print flow
+        mod_flow_entry(datapath, flow, ofproto.OFPFC_ADD)
         
