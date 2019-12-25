@@ -1,5 +1,3 @@
-
-
 ## Topology
 
 ```
@@ -139,10 +137,14 @@ setup proxy
 ./setup_proxy.sh vm1 vm2 vm3 vm4
 ```
 
+### Setup VMs
+
+```
+./setup_VMs.sh
+```
+
 ### Access VMs
 
 ```
 uvt-kvm ssh vm1
 ```
-
-
