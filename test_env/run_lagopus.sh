@@ -29,14 +29,6 @@ LOG_FILE=/dev/stderr
 #   Lagopus Switch
 #
   
-# create veth
-
-sudo ip netns add ns0
-sudo ip link add veth0 type veth peer name lagopus-veth0
-sudo ip link set veth0 netns ns0
-sudo ip netns exec ns0 ip link set up lo
-sudo ip netns exec ns0 ip link set up veth0
-
 # create lagopus.dsl
 
 cat << EOF > ${CONF_FILE}
