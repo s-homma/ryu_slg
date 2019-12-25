@@ -108,6 +108,22 @@ virsh edit vm4
 
 ```
 
+Restart VMs
+
+```
+uvt-kvm ssh vm1 sudo poweroff
+uvt-kvm ssh vm2 sudo poweroff
+uvt-kvm ssh vm3 sudo poweroff
+uvt-kvm ssh vm4 sudo poweroff
+```
+
+```
+virsh start vm1
+virsh start vm2
+virsh start vm3
+virsh start vm4
+```
+
 
 ### (Option) Setup proxy
 

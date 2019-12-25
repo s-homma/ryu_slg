@@ -21,9 +21,7 @@ ryu-manager ~/ryu_slg/ryu_slg.py ~/ryu_slg/ryu_slg_init.py
 
 ```
 ## Add
-curl -X POST -d '{"slice_id":1, "src_ip":"10.0.0.1", "dst_ip":"10.1.0.1", "dst_port":10484}' 127.0.0.1:8080/stats/slice/add
+curl -X POST -d '{"slice_id":1, "src_ip":"10.0.0.1", "dst_ip":"10.1.0.1", "dst_port":10484}' 127.0.0.1:8080/slice/add
 ## Delete
-curl -X POST -d '{"slice_id":1}' 127.0.0.1:8080/stats/slice/add
-## Add
-curl -X POST -d '{}' 127.0.0.1:8080/stats/slice/reset
+curl -X POST -d '{"slice_id":1}' 127.0.0.1:8080/slice/delete
 ```

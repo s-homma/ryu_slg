@@ -1163,7 +1163,7 @@ class RestStatsApi(app_manager.RyuApp):
                        controller=StatsController, action='send_experimenter',
                        conditions=dict(method=['POST']))
 
-        uri = path + '/slice/{cmd}'
+        uri = '/slice/{cmd}'
         mapper.connect('stats', uri,
                        controller=StatsController, action='mod_slice',
                        conditions=dict(method=['POST']))
