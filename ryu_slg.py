@@ -758,7 +758,7 @@ class StatsController(ControllerBase):
         if cmd == 'add':
             of_cmd = dp.ofproto.OFPFC_ADD
         elif cmd == 'delete':
-            of_cmd = dp.ofproto.ofpfc_delete
+            of_cmd = dp.ofproto.OFPFC_DELETE
         elif cmd == 'reset':
             print 'reset slice: Not implemented'
             return Response(status=404)
@@ -800,7 +800,7 @@ class StatsController(ControllerBase):
             if cmd == 'add':
                 of_cmd = dp.ofproto.OFPFC_ADD
             elif cmd == 'delete':
-                of_cmd = dp.ofproto.ofpfc_delete
+                of_cmd = dp.ofproto.OFPFC_DELETE
             elif cmd == 'reset':
                 print 'reset slice: Not implemented'
                 return Response(status=404)
@@ -839,7 +839,7 @@ class StatsController(ControllerBase):
             if cmd == 'add':
                 of_cmd = dp.ofproto.OFPFC_ADD
             elif cmd == 'delete':
-                of_cmd = dp.ofproto.ofpfc_delete
+                of_cmd = dp.ofproto.OFPFC_DELETE
             elif cmd == 'reset':
                 print 'reset slice: Not implemented'
                 return Response(status=404)
