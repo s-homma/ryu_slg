@@ -717,27 +717,27 @@ class StatsController(ControllerBase):
 
     def mod_slice(self, req, cmd, **_kwargs):
 
-        print "mod_slice"
+        print("mod_slice")
         
         try:
-            slice = ast.literal_eval(req.body)
+            slice = ast.literal_eval(req.body.decode('utf-8'))
 
         except SyntaxError:
             LOG.debug('invalid syntax %s', req.body)
             return Response(status=400)
 
-        print slice
+        print(slice)
 
         slice_id = slice.get('slice_id')
-        print "slice_id: " + str(slice_id)
+        print("slice_id: " + str(slice_id))
         src_ip = slice.get('src_ip')
-        print "src_ip: " + str(src_ip)
+        print("src_ip: " + str(src_ip))
         dst_ip = slice.get('dst_ip')
-        print "dst_ip: " + str(dst_ip)
+        print("dst_ip: " + str(dst_ip))
         dst_port = slice.get('dst_port')
-        print "dst_port: " + str(dst_port)
+        print("dst_port: " + str(dst_port))
         vni = 5000 + slice_id * 10
-        print "vni: " + str(vni)
+        print("vni: " + str(vni))
 
         for i in range(3):
             dpid = i + 1
@@ -760,7 +760,7 @@ class StatsController(ControllerBase):
         elif cmd == 'delete':
             of_cmd = dp.ofproto.OFPFC_DELETE
         elif cmd == 'reset':
-            print 'reset slice: Not implemented'
+            print('reset slice: Not implemented')
             return Response(status=404)
         else:
             return Response(status=404)
@@ -776,13 +776,13 @@ class StatsController(ControllerBase):
         )
         flow['actions'].append({"type":"OUTPUT", "port": 2})
         flow['match'] = {'in_port': 1, "dl_type": 2048, "ip_proto": 6, "ipv4_src": src_ip, "ipv4_dst": dst_ip, "tcp_dst": dst_port}
-        print flow
+        print(flow)
         _ofctl.mod_flow_entry(dp, flow, of_cmd)
         flow['match'] = {'in_port': 1, "dl_type": 2048, "ip_proto": 17, "ipv4_src": src_ip, "ipv4_dst": dst_ip, "udp_dst": dst_port}
-        print flow
+        print(flow)
         _ofctl.mod_flow_entry(dp, flow, of_cmd)
         flow['match'] = {'in_port': 1, "dl_type": 2048, "ip_proto": 1, "ipv4_src": src_ip, "ipv4_dst": dst_ip}
-        print flow
+        print(flow)
         _ofctl.mod_flow_entry(dp, flow, of_cmd)
 
 
@@ -802,7 +802,7 @@ class StatsController(ControllerBase):
             elif cmd == 'delete':
                 of_cmd = dp.ofproto.OFPFC_DELETE
             elif cmd == 'reset':
-                print 'reset slice: Not implemented'
+                print('reset slice: Not implemented')
                 return Response(status=404)
             else:
                 return Response(status=404)
@@ -818,13 +818,13 @@ class StatsController(ControllerBase):
             )
             flow['actions'].append({"type":"OUTPUT", "port": 2})
             flow['match'] = {'in_port': 1, "dl_type": 2048, "ip_proto": 6, "ipv4_src": dst_ip, "ipv4_dst": src_ip, "udp_src": dst_port}
-            print flow
+            print(flow)
             _ofctl.mod_flow_entry(dp, flow, of_cmd)
             flow['match'] = {'in_port': 1, "dl_type": 2048, "ip_proto": 17, "ipv4_src": dst_ip, "ipv4_dst": src_ip, "udp_src": dst_port}
-            print flow
+            print(flow)
             _ofctl.mod_flow_entry(dp, flow, of_cmd)
             flow['match'] = {'in_port': 1, "dl_type": 2048, "ip_proto": 1, "ipv4_src": dst_ip, "ipv4_dst": src_ip}
-            print flow
+            print(flow)
             _ofctl.mod_flow_entry(dp, flow, of_cmd)
 
         else:
@@ -841,7 +841,7 @@ class StatsController(ControllerBase):
             elif cmd == 'delete':
                 of_cmd = dp.ofproto.OFPFC_DELETE
             elif cmd == 'reset':
-                print 'reset slice: Not implemented'
+                print('reset slice: Not implemented')
                 return Response(status=404)
             else:
                 return Response(status=404)
@@ -857,13 +857,13 @@ class StatsController(ControllerBase):
             )
             flow['actions'].append({"type":"OUTPUT", "port": 2})
             flow['match'] = {'in_port': 1, "dl_type": 2048, "ip_proto": 6, "ipv4_src": dst_ip, "ipv4_dst": src_ip, "tcp_src": dst_port}
-            print flow
+            print(flow)
             _ofctl.mod_flow_entry(dp, flow, of_cmd)
             flow['match'] = {'in_port': 1, "dl_type": 2048, "ip_proto": 17, "ipv4_src": dst_ip, "ipv4_dst": src_ip, "udp_src": dst_port}
-            print flow
+            print(flow)
             _ofctl.mod_flow_entry(dp, flow, of_cmd)
             flow['match'] = {'in_port': 1, "dl_type": 2048, "ip_proto": 1, "ipv4_src": dst_ip, "ipv4_dst": src_ip}
-            print flow
+            print(flow)
             _ofctl.mod_flow_entry(dp, flow, of_cmd)
 
         return Response(status=200)

@@ -172,11 +172,11 @@ class RyuSlgInit(app_manager.RyuApp):
         flow = {'priority': 1, 'table_id': 0}
         flow['match'] = {'in_port': 1}
         flow['actions'] = [{'type':'OUTPUT','port': 2}]
-        print flow
+        print(flow)
         mod_flow_entry(datapath, flow, ofproto.OFPFC_ADD)
         flow['match'] = {'in_port': 2}
         flow['actions'] = [{'type':'OUTPUT','port': 1}]
-        print flow
+        print(flow)
         mod_flow_entry(datapath, flow, ofproto.OFPFC_ADD)
         
         if slg_id != 1 :
@@ -192,7 +192,7 @@ class RyuSlgInit(app_manager.RyuApp):
                 vni = 5000 + 4 * 10
             )
             flow['actions'].append({"type":"OUTPUT", "port": 2})
-            print flow
+            print(flow)
             mod_flow_entry(datapath, flow, ofproto.OFPFC_ADD)
         
         # in_port: 2 DECAP
@@ -201,6 +201,6 @@ class RyuSlgInit(app_manager.RyuApp):
         flow['actions'] = make_vxlan_decap_action()
         flow['actions'].append({"type": "SET_FIELD", "field": "eth_dst", "value": slg[slg_id].interface[1].gateway.mac_address})
         flow['actions'].append({"type":"OUTPUT", "port": 1})
-        print flow
+        print(flow)
         mod_flow_entry(datapath, flow, ofproto.OFPFC_ADD)
         

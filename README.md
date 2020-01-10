@@ -6,7 +6,7 @@
 git clone https://github.com/lagopus/ryu-lagopus-ext
 cd ryu-lagopus-ext
 git checkout lagopus-general-tunnel-ext
-sudo python ./setup.py install
+sudo python3 ./setup.py install
 cd
 git clone https://github.com/hibitomo/ryu_slg
 ```
